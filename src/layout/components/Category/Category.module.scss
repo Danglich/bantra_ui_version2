@@ -1,0 +1,129 @@
+.container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 5px 0 rgb(0 0 0 / 5%);
+    padding: 12px 0;
+    background-color: white;
+}
+
+.container.fixed {
+    position: fixed;
+    top: 0;
+    z-index: 999;
+}
+
+.body {
+    width: 1190px;
+
+    .menu {
+        display: flex;
+        width: 100%;
+        overflow-x: auto;
+        &::-webkit-scrollbar-thumb {
+            display: none;
+        }
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .item {
+            cursor: pointer;
+            border-radius: 8px;
+            padding: 12px 20px;
+            flex: none;
+            background-color: var(--primary-color);
+            color: white;
+            margin-right: 12px;
+
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+    }
+}
+
+.go-to-top {
+    height: 48px;
+    width: 48px;
+    background-color: var(--primary-color);
+    border-radius: 8px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 86px;
+    right: 42px;
+    animation: goToTop 0.3s ease-in;
+    cursor: pointer;
+    z-index: 999;
+
+    &.hide {
+        display: none;
+    }
+    &:hover {
+        opacity: 0.9;
+    }
+
+    .go-to-top-icon {
+        font-size: 3.6rem;
+    }
+}
+
+.container {
+    .phone {
+        position: fixed;
+        right: 28px;
+        bottom: 12px;
+        z-index: 999;
+        background-color: #ee0000;
+        color: white;
+        font-size: 1.8rem;
+        font-weight: bold;
+        border-radius: 25px;
+        box-shadow: 0 2px 7px 0 rgb(0 0 0 / 40%);
+        padding: 10px 65px 10px 25px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+
+        .phone-icon-wrapper {
+            background-color: white;
+            position: absolute;
+            right: 0;
+            border-radius: 50%;
+            height: 50px;
+            width: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .phone-icon {
+                color: #ee0000;
+                font-size: 2.4rem;
+                animation: retate 0.16s ease-in-out infinite alternate-reverse;
+                transform-origin: 50% 50%;
+            }
+        }
+    }
+}
+
+@keyframes retate {
+    from {
+        transform: rotate(-25deg);
+    }
+    to {
+        transform: rotate(5deg);
+    }
+}
+@keyframes goToTop {
+    from {
+        transform: translateY(200%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}

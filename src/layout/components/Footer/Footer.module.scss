@@ -1,0 +1,44 @@
+.container {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 28px;
+    padding-bottom: 28px;
+}
+
+.body {
+    width: 1190px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    .box {
+        margin-right: 40px;
+
+        .title {
+            text-transform: uppercase;
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .list {
+            .item {
+                font-size: 1.5rem;
+                color: #333;
+                padding: 4px 0;
+                cursor: pointer;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+
+                img {
+                    max-width: 200px;
+                }
+            }
+        }
+    }
+}

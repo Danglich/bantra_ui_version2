@@ -1,0 +1,35 @@
+.image {
+    position: relative;
+
+    .img-background {
+        width: 100%;
+    }
+
+    .image-slide-container {
+        position: absolute;
+        bottom: calc(-60px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+
+        .image-slide-body {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 1190px;
+        }
+    }
+}
+
+.sub-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f3f3;
+
+    .body {
+        width: 1190px;
+        margin-top: 88px;
+    }
+}

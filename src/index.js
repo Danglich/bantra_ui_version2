@@ -2,11 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import GlobalStyle from './components/GlobalStyle';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
-        <App />
+        <GlobalStyle>
+            <Router>
+                <App />
+            </Router>
+        </GlobalStyle>
     </React.StrictMode>,
 );
 
