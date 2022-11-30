@@ -1,0 +1,130 @@
+.content-container {
+    padding-top: 20px;
+    position: relative;
+    margin-bottom: 40px;
+    text-align: left;
+
+    h1 {
+        font-size: 28px;
+        font-weight: bold;
+        margin: 12px 0;
+    }
+
+    h2 {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 12px 0;
+    }
+
+    blockquote {
+        border-left: 3px solid var(--primary-color);
+        color: #757575;
+        margin-left: 0;
+        padding: 0 0 2px 20px;
+        border-radius: 2px;
+    }
+
+    a[href] {
+        color: #ee0000;
+        text-decoration: underline;
+    }
+
+    img {
+        max-width: 100%;
+        margin: 16px 0;
+    }
+
+    ul {
+        padding-left: 26px;
+    }
+
+    li {
+        list-style: disc;
+    }
+
+    table {
+        border-collapse: collapse;
+        border-spacing: 0;
+        width: 100%;
+        padding-top: 20px;
+
+        tr {
+            th {
+                border: 1px solid #e6dfdd;
+                font-size: 1.4rem;
+                line-height: 1.6;
+                padding: 2px 4px 2px 12px;
+                text-align: left;
+            }
+
+            td {
+                border: 1px solid #e6dfdd;
+                font-size: 1.4rem;
+                line-height: 1.6;
+                padding: 2px 4px 2px 12px;
+                text-align: left;
+            }
+        }
+    }
+}
+
+.tbOfContent-container {
+    text-align: left;
+    padding-left: 24px;
+    padding-top: 10px;
+    padding-bottom: 14px;
+    padding-right: 10px;
+
+    h1 {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    a[href] {
+        color: #555;
+        text-decoration: underline;
+        font-weight: 500;
+
+        &:hover {
+            color: red;
+        }
+    }
+
+    ul {
+        padding-left: 36px;
+    }
+
+    li {
+        list-style: none;
+        padding-top: 4px;
+    }
+}
+
+.link-item {
+    position: relative;
+
+    &.active {
+        &::after {
+            width: 100%;
+            color: #006837;
+        }
+    }
+
+    &::after {
+        content: '';
+        display: block;
+        height: 2.5px;
+        width: 0;
+        background-color: #006837;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        transition: all 0.3s ease-in-out;
+    }
+
+    &:hover {
+        &::after {
+            width: 100%;
+        }
+    }
+}

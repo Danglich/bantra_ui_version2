@@ -1,0 +1,67 @@
+.slick-slide {
+    padding: 8px 4px;
+}
+
+.ant-rate-star-first,
+.ant-rate-star-second {
+    color: #babcbf;
+}
+
+.input {
+    border: 1px solid #ccc;
+}
+
+input:invalid {
+    border: 1px solid red;
+}
+
+textarea {
+    outline: none;
+}
+
+.active {
+    border: 1px solid #006837 !important;
+    color: #006837;
+}
+
+.active-link {
+    background-color: #006837 !important;
+    color: white;
+}
+
+.skeleton {
+    background-color: rgb(242, 242, 242);
+
+    animation: skeleton 0.5s linear infinite alternate;
+}
+
+.carousel-next,
+.carousel-prev {
+    z-index: 1 !important;
+}
+
+.carousel-item {
+    z-index: 0 !important;
+}
+
+.icon-close {
+    font-size: 28px !important;
+}
+
+@keyframes skeleton {
+    from {
+        opacity: 0.3;
+    }
+    to {
+        opacity: 0.7;
+    }
+}
+
+html {
+    scroll-behavior: smooth !important;
+}
+
+body {
+    height: auto;
+    width: auto;
+}

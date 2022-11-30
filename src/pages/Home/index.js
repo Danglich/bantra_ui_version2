@@ -4,27 +4,55 @@ import tra from '../../acsset/images/tra.jpg';
 import slide1 from '../../acsset/images/slide1.png';
 import slide2 from '../../acsset/images/slide2.png';
 import List from '../../components/List';
+import Slide from '../../components/Slide';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { apiUrl } from '../../constants';
 
 const cx = classNames.bind(styles);
 
 function Home() {
+    const [categorys, setCategorys] = useState([]);
+
+    useEffect(() => {
+        document.title = 'Hải trà Tân Cương';
+    }, []);
+
+    useEffect(() => {
+        let isCacled = false;
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/category`);
+                setCategorys(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        if (!isCacled) {
+            fetchData();
+        }
+
+        return () => (isCacled = true);
+    }, []);
+
     return (
-        <div className={cx('container')}>
+        <div>
             <div className={cx('image')}>
                 <img src={tra} alt="img" className={cx('img-background')}></img>
-                <div className={cx('image-slide-container')}>
-                    <div className={cx('image-slide-body')}>
-                        <img src={slide1} alt=""></img>
-                        <img src={slide2} alt=""></img>
+                <div className="absolute bottom-[-60px] w-full items-center flex justify-center  max-lg:hidden">
+                    <div className="flex items-center justify-between lg:w-[100%] xl:w-[1190px]">
+                        <img className="w-[48%]" src={slide1} alt=""></img>
+                        <img className="w-[48%]" src={slide2} alt=""></img>
                     </div>
                 </div>
             </div>
             <div className={cx('sub-container')}>
-                <div className={cx('body')}>
-                    <List />
-                    <List />
-                    <List />
-                    <List />
+                <div className="w-[1190px] mt-[88px] mb-[40px] max-lg:w-full max-lg:px-[16px] ">
+                    {categorys[0] && <Slide categoryId={categorys[0]?._id} />}
+                    {categorys.map((item) => (
+                        <List key={item._id} category={item} />
+                    ))}
                 </div>
             </div>
         </div>

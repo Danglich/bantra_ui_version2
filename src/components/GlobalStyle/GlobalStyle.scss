@@ -7,6 +7,7 @@
 
 html {
     font-size: 62.5%;
+    text-transform: left;
 }
 
 * {
@@ -15,6 +16,12 @@ html {
     padding: 0;
     font-family: 'Open Sans', sans-serif;
     font-size: 16px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2.8rem;
+    font-weight: 600;
 }
 
 body {
@@ -29,6 +36,7 @@ html *::-webkit-scrollbar-thumb {
 html *::-webkit-scrollbar {
     border-radius: 0;
     width: 8px;
+    scroll-behavior: smooth;
 }
 
 input,

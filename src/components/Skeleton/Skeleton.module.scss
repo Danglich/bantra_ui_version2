@@ -1,0 +1,18 @@
+.category-item {
+    height: 48px;
+    width: 120px;
+    margin-right: 12px;
+    border-radius: 8px;
+    background-color: rgb(242, 242, 242);
+
+    animation: skeleton 0.5s linear infinite alternate;
+}
+
+@keyframes skeleton {
+    from {
+        opacity: 0.3;
+    }
+    to {
+        opacity: 0.7;
+    }
+}
