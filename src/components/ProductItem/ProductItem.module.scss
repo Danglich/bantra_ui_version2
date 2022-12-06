@@ -42,8 +42,10 @@
     //margin: 0 6px 16px 6px;
 
     &:hover {
-        .action-container {
-            opacity: 1;
+        @media (min-width: 768px) {
+            .action-container {
+                opacity: 1;
+            }
         }
     }
 

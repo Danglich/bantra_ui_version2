@@ -54,7 +54,7 @@ function Post() {
     }, [slug]);
 
     return (
-        <div className="mx-auto font-[500] text-[30px] text-slate-800 py-[20px] text-center xl:w-[1190px] max-xl:w-full">
+        <div className="mx-auto font-[500] text-[30px] text-slate-800 px-[12px] py-[20px] text-center xl:w-[1190px] max-xl:w-full">
             <h1 className="uppercase mb-[20px]">
                 {category ? category.name : 'Tin tức sự kiện'}
             </h1>
