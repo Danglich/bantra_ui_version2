@@ -38,7 +38,7 @@ function SideBar({ hiddenNav, slugCategory }) {
                     <Link key={category._id} to={`/cam-nang/${category.slug}`}>
                         <li
                             className={cx(
-                                'flex items-center mb-[8px] justify-between text-left cursor-pointer text-[15px] px-[12px] py-[10px] rounded-[6px] hover:bg-[#006837] hover:text-white',
+                                'flex items-center mb-[8px] justify-between text-left cursor-pointer text-[15px] px-[12px] py-[10px] rounded-[6px] hover:bg-[#006837] hover:text-white dark:text-[#555]',
                                 slugCategory === category.slug && 'active',
                             )}
                         >

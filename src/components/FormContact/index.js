@@ -65,7 +65,7 @@ function FormContact() {
                 value={formState.content || ''}
                 onChange={handleChangeFormState}
             />
-            <button className="w-[250px] h-[40px] bg-[#006837] text-white text-[700] mt-[20px] max-sm:w-full ">
+            <button className="w-[250px] h-[40px] bg-[#006837] text-white dark:text-[#555] text-[700] mt-[20px] max-sm:w-full ">
                 <SendIcon /> GỬI
             </button>
         </form>

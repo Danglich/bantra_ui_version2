@@ -19,7 +19,7 @@ function Cart({ isShowing, toggle }) {
                               onClick={toggle}
                               className="w-[30px] h-[30px] bg-[#006837] cursor-pointer rounded-full flex items-center justify-center"
                           >
-                              <CloseIcon className=" text-white text-[22px]" />
+                              <CloseIcon className=" text-white dark:text-[#555] text-[22px]" />
                           </div>
                       </div>
 
@@ -40,7 +40,7 @@ function Cart({ isShowing, toggle }) {
                                   className="px-[20px] py-[20px] block"
                                   onClick={toggle}
                               >
-                                  <div className="h-[40px] hover:opacity-[0.8] flex items-center justify-center cursor-pointer bg-[#006837] text-white text-[17px] font-[900]">
+                                  <div className="h-[40px] hover:opacity-[0.8] flex items-center justify-center cursor-pointer bg-[#006837] text-white dark:text-[#555] text-[17px] font-[900]">
                                       THANH TOÁN
                                   </div>
                               </Link>

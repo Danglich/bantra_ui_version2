@@ -39,7 +39,7 @@ function Search() {
         <div className="mx-auto py-[20px] mt-[12px] mb-[40px] max-md:px-[16px] xl:w-[1190px] max-xl:w-full">
             <h1 className="uppercase">Kết quả tìm kiếm</h1>
             <div className="bg-black px-[8px] py-[9px] mt-[32px] mb-[22px]">
-                <h1 className=" text-white text-[17px]">
+                <h1 className=" text-white dark:text-[#555] text-[17px]">
                     Kết quả tìm kiếm sản phẩm
                 </h1>
             </div>

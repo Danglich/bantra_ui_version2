@@ -141,7 +141,7 @@ function Rating({ title }) {
                         name="email"
                         value={formInput?.email || ''}
                     ></input>
-                    <button className="bg-[#006837] text-white uppercase w-[70px] h-[40px] rounded-[4px] text-center hover:opacity-[0.8]">
+                    <button className="bg-[#006837] text-white dark:text-[#555] uppercase w-[70px] h-[40px] rounded-[4px] text-center hover:opacity-[0.8]">
                         Gửi
                     </button>
                 </div>

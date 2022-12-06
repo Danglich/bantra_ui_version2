@@ -70,7 +70,7 @@ function ModalCategory({ isShowing, toggle }) {
                           onClick={toggle}
                           className="absolute top-[0px] right-[-50px] cursor-pointer w-[48px] h-[48px] flex items-center justify-center"
                       >
-                          <CloseIcon className="icon-close text-white" />
+                          <CloseIcon className="icon-close text-white dark:text-[#555]" />
                       </div>
                   </div>
                   <div
