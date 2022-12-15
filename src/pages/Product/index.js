@@ -19,6 +19,7 @@ import LastView from '../../components/LastView';
 import { useContext } from 'react';
 import { CartContext } from '../../contexts/CartContext';
 import { message } from 'antd';
+import useProduct from '../../hooks/useProduct';
 
 const cx = classNames.bind(styles);
 
@@ -30,8 +31,10 @@ marked.use(gfmHeadingId(options));
 
 function Product() {
     const { id } = useParams();
-    const [product, setProduct] = useState();
-    const [isLoading, setIsLoading] = useState(true);
+    // const [product, setProduct] = useState();
+    // const [isLoading, setIsLoading] = useState(true);
+    const { data: product, isLoading } = useProduct(id);
+
     const [viewMore, setViewMore] = useState(false);
     const [suggest, setSuggest] = useState([]);
     const [quantity, setQuantity] = useState(1);
@@ -47,28 +50,28 @@ function Product() {
         onAdd(product, quantity);
     };
 
-    useEffect(() => {
-        let isCacled = false;
-        const fetchData = async (req, res) => {
-            setIsLoading(true);
-            try {
-                const product = await axios.get(`${apiUrl}/product/${id}`);
-                if (product.data) {
-                    setProduct(product.data);
-                }
-                setIsLoading(false);
-            } catch (error) {
-                console.log(error);
-                setIsLoading(false);
-            }
-        };
+    // useEffect(() => {
+    //     let isCacled = false;
+    //     const fetchData = async (req, res) => {
+    //         setIsLoading(true);
+    //         try {
+    //             const product = await axios.get(`${apiUrl}/product/${id}`);
+    //             if (product.data) {
+    //                 setProduct(product.data);
+    //             }
+    //             setIsLoading(false);
+    //         } catch (error) {
+    //             console.log(error);
+    //             setIsLoading(false);
+    //         }
+    //     };
 
-        if (!isCacled) {
-            fetchData();
-        }
+    //     if (!isCacled) {
+    //         fetchData();
+    //     }
 
-        return () => (isCacled = true);
-    }, [id]);
+    //     return () => (isCacled = true);
+    // }, [id]);
 
     useEffect(() => {
         document.title = product?.name;

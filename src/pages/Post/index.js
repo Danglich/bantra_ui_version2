@@ -1,57 +1,66 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Feature from './components/Feature';
 import SideBar from './components/SideBar';
 import { CalendarOutlined } from '@ant-design/icons';
-import { apiUrl } from '../../constants';
 import { Link, useParams } from 'react-router-dom';
 import { Spin } from 'antd';
 import NotFound from '../../components/NotFound';
+import useCategoryPost from '../../hooks/useCategoryPost';
+import usePosts from '../../hooks/usePosts';
+import { useMemo } from 'react';
 
 function Post() {
-    const [posts, setPosts] = useState([]);
+    //const [posts, setPosts] = useState([]);
     const { slug } = useParams();
-    const [isLoading, setIsLoading] = useState(true);
-    const [category, setCategory] = useState();
+    //const [isLoading, setIsLoading] = useState(true);
+    //const [category, setCategory] = useState();
 
     useEffect(() => {
         document.title = 'Tin tức - Sự kiện';
     }, []);
 
-    useEffect(() => {
-        let isCacled = false;
-        const fetchData = async () => {
-            setIsLoading(true);
-            try {
-                if (!slug) {
-                    const posts = await axios.get(`${apiUrl}/post`);
+    const { data: category } = useCategoryPost(slug);
+    const categoryId = useMemo(
+        () => (slug ? category?._id : null),
+        [slug, category],
+    );
 
-                    setPosts(posts.data);
-                    setIsLoading(false);
-                } else {
-                    const category = await axios.get(
-                        `${apiUrl}/categoryPost/${slug}`,
-                    );
-                    setCategory(category.data[0]);
-                    const posts = await axios.get(
-                        `${apiUrl}/post/category/${category.data[0]._id}`,
-                    );
+    const { data: posts, isLoading } = usePosts(categoryId);
 
-                    setPosts(posts.data);
-                    setIsLoading(false);
-                }
-            } catch (error) {
-                console.log(error);
-                setIsLoading(false);
-            }
-        };
+    // useEffect(() => {
+    //     let isCacled = false;
+    //     const fetchData = async () => {
+    //         setIsLoading(true);
+    //         try {
+    //             if (!slug) {
+    //                 const posts = await axios.get(`${apiUrl}/post`);
 
-        if (!isCacled) {
-            fetchData();
-        }
+    //                 setPosts(posts.data);
+    //                 setIsLoading(false);
+    //             } else {
+    //                 // const category = await axios.get(
+    //                 //     `${apiUrl}/categoryPost/${slug}`,
+    //                 // );
+    //                 //setCategory(category.data[0]);
+    //                 const posts = await axios.get(
+    //                     `${apiUrl}/post/category/${category._id}`,
+    //                 );
 
-        return () => (isCacled = true);
-    }, [slug]);
+    //                 setPosts(posts.data);
+    //                 setIsLoading(false);
+    //             }
+    //         } catch (error) {
+    //             console.log(error);
+    //             setIsLoading(false);
+    //         }
+    //     };
+
+    //     if (!isCacled) {
+    //         fetchData();
+    //     }
+
+    //     return () => (isCacled = true);
+    // }, [slug]);
 
     return (
         <div className="mx-auto font-[500] text-[30px] text-slate-800 px-[12px] py-[20px] text-center xl:w-[1190px] max-xl:w-full">

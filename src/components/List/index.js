@@ -2,41 +2,41 @@ import classNames from 'classnames/bind';
 import styles from './List.module.scss';
 import ProductItem from '../ProductItem';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { apiUrl } from '../../constants';
 import { Link } from 'react-router-dom';
 import Skeleton from '../Skeleton';
+import useList from '../../hooks/useList';
 
 const cx = classNames.bind(styles);
 
 function List({ category }) {
-    const [products, setProducts] = useState([]);
-    const [isLoading, setIsloading] = useState(true);
+    //const [products, setProducts] = useState([]);
+    //const [isLoading, setIsloading] = useState(true);
 
-    useEffect(() => {
-        let isCacled = false;
+    const { isLoading, data: products } = useList(category._id, 'less');
 
-        const fetchData = async () => {
-            setIsloading(true);
-            try {
-                const products = await axios.get(
-                    `${apiUrl}/product?categoryId=${category._id}&&type=less`,
-                );
-                setProducts(products.data);
-                setIsloading(false);
-            } catch (error) {
-                console.log(error);
-                setIsloading(false);
-            }
-        };
+    // useEffect(() => {
+    //     let isCacled = false;
 
-        if (!isCacled) {
-            fetchData();
-        }
+    //     const fetchData = async () => {
+    //         setIsloading(true);
+    //         try {
+    //             const products = await axios.get(
+    //                 `${apiUrl}/product?categoryId=${category._id}&&type=less`,
+    //             );
+    //             setProducts(products.data);
+    //             setIsloading(false);
+    //         } catch (error) {
+    //             console.log(error);
+    //             setIsloading(false);
+    //         }
+    //     };
 
-        return () => (isCacled = true);
-    }, [category._id]);
+    //     if (!isCacled) {
+    //         fetchData();
+    //     }
+
+    //     return () => (isCacled = true);
+    // }, [category._id]);
 
     return (
         <div className={cx('container')}>

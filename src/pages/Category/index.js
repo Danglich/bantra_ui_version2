@@ -2,69 +2,79 @@ import styles from './Category.module.scss';
 import classNames from 'classnames/bind';
 import { useParams } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
-import axios from 'axios';
-import { apiUrl } from '../../constants';
 import ProductItem from '../../components/ProductItem';
 import { Spin } from 'antd';
+import useCategory from '../../hooks/useCategory';
+import useList from '../../hooks/useList';
 
 const cx = classNames.bind(styles);
 
 function Category() {
     const { slug } = useParams();
-    const [category, setCategory] = useState();
-    const [products, setProducts] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    //const [category, setCategory] = useState();
+    // const [products, setProducts] = useState([]);
+    // const [isLoading, setIsLoading] = useState(true);
     const [filter, setFilter] = useState('');
     const [filterPrice, setFilterPrice] = useState();
     const [productsFilter, setProductsFilter] = useState([]);
     const [productsFilterPrice, setProductsFilterPrice] = useState([]);
 
+    const { data: category } = useCategory(slug);
+
+    const categoryId = useMemo(() => {
+        return category ? category._id : null;
+    }, [category]);
+
+    const { data: products, isLoading } = useList(categoryId, 'more');
+
     const productsAsc = useMemo(() => {
-        return [...products].sort((a, b) => a.price - b.price);
+        return products ? [...products].sort((a, b) => a.price - b.price) : [];
     }, [products]);
 
     const productsDecs = useMemo(() => {
-        return [...products].sort((a, b) => b.price - a.price);
+        return products ? [...products].sort((a, b) => b.price - a.price) : [];
     }, [products]);
 
     const productsNew = useMemo(() => {
-        return [...products].sort((a, b) => b.createdAt - a.createdAt);
+        return products
+            ? [...products].sort((a, b) => b.createdAt - a.createdAt)
+            : [];
     }, [products]);
 
     useEffect(() => {
         document.title = category?.name;
     }, [category]);
 
-    useEffect(() => {
-        let isCacled = false;
+    // useEffect(() => {
+    //     let isCacled = false;
 
-        const fetchData = async () => {
-            setIsLoading(true);
-            try {
-                const category = await axios.get(`${apiUrl}/category/${slug}`);
+    //     const fetchData = async () => {
+    //         setIsLoading(true);
+    //         try {
+    //             const category = await axios.get(`${apiUrl}/category/${slug}`);
 
-                setCategory(category.data);
+    //             setCategory(category.data);
 
-                if (category.data) {
-                    const products = await axios.get(
-                        `${apiUrl}/product?categoryId=${category.data?._id}&&type=more`,
-                    );
+    //             if (category.data) {
+    //                 const products = await axios.get(
+    //                     `${apiUrl}/product?categoryId=${category.data?._id}&&type=more`,
+    //                 );
 
-                    setProducts(products.data);
-                    setIsLoading(false);
-                }
-            } catch (error) {
-                console.log(error);
-                setIsLoading(false);
-            }
-        };
+    //                 setProducts(products.data);
+    //                 setIsLoading(false);
+    //             }
+    //         } catch (error) {
+    //             console.log(error);
+    //             setIsLoading(false);
+    //         }
+    //     };
 
-        if (!isCacled) {
-            fetchData();
-        }
+    //     if (!isCacled) {
+    //         fetchData();
+    //     }
 
-        return () => (isCacled = true);
-    }, [slug]);
+    //     return () => (isCacled = true);
+    // }, [slug]);
 
     const handleChangeCheckbox = (e) => {
         if (e.target.checked) {
@@ -95,7 +105,7 @@ function Category() {
             setProductsFilter(productsDecs);
         }
         if (filter === '') {
-            setProductsFilter(products);
+            setProductsFilter(products || []);
         }
     }, [filter, productsAsc, productsDecs, productsNew, products]);
 
@@ -131,6 +141,7 @@ function Category() {
         }
     }, [filterPrice, productsFilter]);
 
+    console.log(productsFilter);
     return (
         <div className="flex items-center justify-center w-full ">
             <div className="w-full xl:w-[1190px]">
@@ -236,7 +247,7 @@ function Category() {
                         )}
                         {filterPrice && (
                             <>
-                                {productsFilterPrice.length > 0 ? (
+                                {productsFilterPrice?.length > 0 ? (
                                     productsFilterPrice.map((product) => {
                                         return (
                                             <ProductItem
@@ -251,8 +262,7 @@ function Category() {
                                         <h1>Không tìm thấy sản phẩm</h1>
                                         <img
                                             alt="no item"
-                                            src="https://haitratancuong.com/skins/default/images/nothing-found.png
-    "
+                                            src="https://haitratancuong.com/skins/default/images/nothing-found.png"
                                         ></img>
                                     </div>
                                 )}

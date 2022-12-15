@@ -23,7 +23,9 @@ function ProductItem({ isSlider, product, border }) {
     return (
         <div
             className={
-                isSlider ? '' : 'w-[25%] max-sm:w-[50%] max-sm:mt-[16px]'
+                isSlider
+                    ? ''
+                    : 'w-[25%] max-sm:w-[50%] max-sm:mt-[16px] mb-[16px]'
             }
         >
             <Link

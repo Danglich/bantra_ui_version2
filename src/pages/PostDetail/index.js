@@ -1,44 +1,43 @@
-import axios from 'axios';
 import { useEffect } from 'react';
-import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import SideBar from '../Post/components/SideBar';
-import { apiUrl } from '../../constants';
 import { useCallback } from 'react';
 import { marked } from 'marked';
 import styles from './PostDetail.module.scss';
 import classNames from 'classnames/bind';
 import PostMore from '../../components/PostMore';
 import Rating from '../../components/Rate';
+import usePost from '../../hooks/usePost';
 
 const cx = classNames.bind(styles);
 
 function PostDetail() {
     const { id } = useParams();
-    const [post, setPost] = useState();
+    //const [post, setPost] = useState();
+    const { data: post } = usePost(id);
 
     useEffect(() => {
         document.title = post?.name;
     }, [post]);
 
-    useEffect(() => {
-        let isCacled = false;
+    // useEffect(() => {
+    //     let isCacled = false;
 
-        const fetchData = async () => {
-            try {
-                const product = await axios.get(`${apiUrl}/post/${id}`);
-                setPost(product.data);
-            } catch (error) {
-                console.log(error);
-            }
-        };
+    //     const fetchData = async () => {
+    //         try {
+    //             const product = await axios.get(`${apiUrl}/post/${id}`);
+    //             setPost(product.data);
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     };
 
-        if (!isCacled) {
-            fetchData();
-        }
+    //     if (!isCacled) {
+    //         fetchData();
+    //     }
 
-        return () => (isCacled = true);
-    }, [id]);
+    //     return () => (isCacled = true);
+    // }, [id]);
 
     const descRef = useCallback(
         (node) => {

@@ -36,9 +36,9 @@ function FormPay() {
             />
             <textarea
                 placeholder="Ghi chú"
-                className="h-[42px] px-[12px] w-full h-[80px] input mt-[18px]"
+                className="h-[70px] px-[12px] w-full h-[80px] input mt-[18px]"
             />
-            <button className="text-white dark:text-[#555] hover:opacity-[0.8] font-[900] bg-[#006837] rounded-[4px] py-[11px] mt-[20px] float-right uppercase px-[20px]">
+            <button className="text-white dark:text-[#555] hover:opacity-[0.8] font-[900] bg-[#006837] rounded-[4px] py-[11px] mt-[20px] float-right max-md:float-none uppercase px-[20px]">
                 Hoàn tất đơn hàng
             </button>
         </form>

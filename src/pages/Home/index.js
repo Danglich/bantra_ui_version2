@@ -5,36 +5,37 @@ import slide1 from '../../acsset/images/slide1.png';
 import slide2 from '../../acsset/images/slide2.png';
 import List from '../../components/List';
 import Slide from '../../components/Slide';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { apiUrl } from '../../constants';
+import { useEffect } from 'react';
+import useCategory from '../../hooks/useCategory';
 
 const cx = classNames.bind(styles);
 
 function Home() {
-    const [categorys, setCategorys] = useState([]);
+    //const [categorys, setCategorys] = useState([]);
 
     useEffect(() => {
         document.title = 'Hải trà Tân Cương';
     }, []);
 
-    useEffect(() => {
-        let isCacled = false;
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(`${apiUrl}/category`);
-                setCategorys(response.data);
-            } catch (error) {
-                console.log(error);
-            }
-        };
+    const { data: categorys } = useCategory();
 
-        if (!isCacled) {
-            fetchData();
-        }
+    // useEffect(() => {
+    //     let isCacled = false;
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await axios.get(`${apiUrl}/category`);
+    //             setCategorys(response.data);
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     };
 
-        return () => (isCacled = true);
-    }, []);
+    //     if (!isCacled) {
+    //         fetchData();
+    //     }
+
+    //     return () => (isCacled = true);
+    // }, []);
 
     return (
         <div>
@@ -48,12 +49,16 @@ function Home() {
                 </div>
             </div>
             <div className={cx('sub-container')}>
-                <div className="w-[1190px] mt-[88px] mb-[40px] max-lg:w-full max-lg:px-[16px] ">
-                    {categorys[0] && <Slide categoryId={categorys[0]?._id} />}
-                    {categorys.map((item) => (
-                        <List key={item._id} category={item} />
-                    ))}
-                </div>
+                {categorys && (
+                    <div className="w-[1190px] mt-[88px] mb-[40px] max-lg:w-full max-lg:px-[16px] ">
+                        {categorys[0] && (
+                            <Slide categoryId={categorys[0]?._id} />
+                        )}
+                        {categorys.map((item) => (
+                            <List key={item._id} category={item} />
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );

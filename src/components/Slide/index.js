@@ -7,15 +7,14 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateBefore';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import axios from 'axios';
-import { apiUrl } from '../../constants';
 import { Spin } from 'antd';
+import useList from '../../hooks/useList';
 
 const cx = classNames.bind(styles);
 
 function Slide({ categoryId }) {
-    const [products, setProducts] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    // const [products, setProducts] = useState([]);
+    // const [isLoading, setIsLoading] = useState(true);
     const [slidesToShow, setSlidesToShow] = useState(5);
 
     useEffect(() => {
@@ -42,28 +41,30 @@ function Slide({ categoryId }) {
         return () => window.removeEventListener('resize', onResize);
     }, []);
 
-    useEffect(() => {
-        let isCacled = false;
-        const fetchData = async () => {
-            setIsLoading(true);
-            try {
-                const products = await axios.get(
-                    `${apiUrl}/product?categoryId=${categoryId}`,
-                );
-                setProducts(products.data);
-                setIsLoading(false);
-            } catch (error) {
-                setIsLoading(false);
-                console.log(error);
-            }
-        };
+    const { data: products, isLoading } = useList(categoryId);
 
-        if (!isCacled) {
-            fetchData();
-        }
+    // useEffect(() => {
+    //     let isCacled = false;
+    //     const fetchData = async () => {
+    //         setIsLoading(true);
+    //         try {
+    //             const products = await axios.get(
+    //                 `${apiUrl}/product?categoryId=${categoryId}`,
+    //             );
+    //             setProducts(products.data);
+    //             setIsLoading(false);
+    //         } catch (error) {
+    //             setIsLoading(false);
+    //             console.log(error);
+    //         }
+    //     };
 
-        return () => (isCacled = true);
-    }, [categoryId]);
+    //     if (!isCacled) {
+    //         fetchData();
+    //     }
+
+    //     return () => (isCacled = true);
+    // }, [categoryId]);
 
     if (isLoading)
         return (

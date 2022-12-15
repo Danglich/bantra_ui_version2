@@ -8,19 +8,24 @@ import './index.css';
 import { BrowserRouter as Router } from 'react-router-dom';
 import LastViewProvider from './contexts/LastViewContext';
 import CartContextProvider from './contexts/CartContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
-        <GlobalStyle>
-            <CartContextProvider>
-                <LastViewProvider>
-                    <Router>
-                        <App />
-                    </Router>
-                </LastViewProvider>
-            </CartContextProvider>
-        </GlobalStyle>
+        <QueryClientProvider client={queryClient}>
+            <GlobalStyle>
+                <CartContextProvider>
+                    <LastViewProvider>
+                        <Router>
+                            <App />
+                        </Router>
+                    </LastViewProvider>
+                </CartContextProvider>
+            </GlobalStyle>
+        </QueryClientProvider>
     </React.StrictMode>,
 );
 
