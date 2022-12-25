@@ -61,7 +61,7 @@ function CartContextProvider({ children }) {
         }
     };
 
-    const onRemove = (product) => {
+    const onRemove = (product, quantity) => {
         foudCartItem = cartItems.find(
             (item) => item.product._id === product._id,
         );
@@ -72,11 +72,15 @@ function CartContextProvider({ children }) {
             );
             setCartItems(newCartItems);
             setTotalQuantities((prev) => prev - foudCartItem.quantity);
-            setTotalPrice((prev) => prev - foudCartItem.product.price);
+            setTotalPrice((prev) =>
+                quantity
+                    ? prev - foudCartItem.product.price * quantity
+                    : prev - foudCartItem.product.price,
+            );
         }
     };
 
-    const toggleQuantity = (cartItem, type) => {
+    const toggleQuantity = (cartItem, type, quantityCurrent) => {
         if (type === 'asc') {
             foudCartItem = cartItems.find(
                 (item) => item.product._id === cartItem.product._id,
@@ -93,7 +97,7 @@ function CartContextProvider({ children }) {
             setTotalPrice((prev) => prev + foudCartItem.product.price);
         }
         if (type === 'dec') {
-            if (cartItems.length === 1) {
+            if (quantityCurrent === 1) {
                 onRemove(cartItem.product);
             } else {
                 foudCartItem = cartItems.find(
@@ -113,11 +117,11 @@ function CartContextProvider({ children }) {
         }
     };
 
-    const resetCart = () => {
+    const resetCart = useCallback(() => {
         setCartItems([]);
         setTotalPrice(0);
         setTotalQuantities(0);
-    };
+    }, []);
 
     const toggleShowCart = useCallback(() => {
         setShowCart(!showCart);

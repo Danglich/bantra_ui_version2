@@ -8,7 +8,15 @@ function ItemCartForPay({ cartItem }) {
     const { onRemove, toggleQuantity } = useContext(CartContext);
 
     const handleRemove = () => {
-        onRemove(cartItem.product);
+        onRemove(cartItem.product, cartItem.quantity);
+    };
+
+    const handleAdd = () => {
+        toggleQuantity(cartItem, 'asc');
+    };
+
+    const handleSubtract = () => {
+        toggleQuantity(cartItem, 'dec', cartItem.quantity);
     };
 
     return (
@@ -39,9 +47,7 @@ function ItemCartForPay({ cartItem }) {
                     </span>
                     <div className="flex h-[35px]  border-[#ccc] border-[1px] mt-[12px]">
                         <div
-                            onClick={() => {
-                                toggleQuantity(cartItem, 'dec');
-                            }}
+                            onClick={handleSubtract}
                             className="w-[35px] h-full  border-[#ccc] border-r-[1px] flex items-center justify-center font-[900]  text-[30px] cursor-pointer"
                         >
                             -
@@ -50,9 +56,7 @@ function ItemCartForPay({ cartItem }) {
                             {cartItem.quantity}
                         </div>
                         <div
-                            onClick={() => {
-                                toggleQuantity(cartItem, 'asc');
-                            }}
+                            onClick={handleAdd}
                             className="w-[35px]  border-[#ccc] border-l-[1px] h-full flex items-center justify-center  font-[900]  text-[26px] cursor-pointer"
                         >
                             +

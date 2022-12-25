@@ -141,7 +141,6 @@ function Category() {
         }
     }, [filterPrice, productsFilter]);
 
-    console.log(productsFilter);
     return (
         <div className="flex items-center justify-center w-full ">
             <div className="w-full xl:w-[1190px]">

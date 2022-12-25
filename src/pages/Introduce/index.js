@@ -16,7 +16,7 @@ function Introduce() {
     }, []);
 
     return (
-        <div className="xl:w-[1190px] max-xl:w-full mx-auto">
+        <div className="xl:w-[1190px] max-xl:w-full mx-auto max-sm:mx-[8px] ">
             <h1 className="text-center uppercase text-[32px] font-bold my-[20px]">
                 Giới thiệu
             </h1>
