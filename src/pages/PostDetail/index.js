@@ -6,38 +6,32 @@ import { marked } from 'marked';
 import styles from './PostDetail.module.scss';
 import classNames from 'classnames/bind';
 import PostMore from '../../components/PostMore';
-import Rating from '../../components/Rate';
 import usePost from '../../hooks/usePost';
+import CommentList from './CommentList';
+import axios from 'axios';
+import { apiUrl } from '../../constants';
 
 const cx = classNames.bind(styles);
 
 function PostDetail() {
     const { id } = useParams();
-    //const [post, setPost] = useState();
     const { data: post } = usePost(id);
 
     useEffect(() => {
-        document.title = post?.name;
+        document.title = post?.title;
     }, [post]);
 
-    // useEffect(() => {
-    //     let isCacled = false;
-
-    //     const fetchData = async () => {
-    //         try {
-    //             const product = await axios.get(`${apiUrl}/post/${id}`);
-    //             setPost(product.data);
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
-
-    //     if (!isCacled) {
-    //         fetchData();
-    //     }
-
-    //     return () => (isCacled = true);
-    // }, [id]);
+    useEffect(() => {
+        // Gọi API để tăng số lượt xem khi state 'views' thay đổi
+        axios
+            .put(`${apiUrl}/api/news/update/views/${post?.id}`)
+            .then((response) => {
+                console.log('Views increased');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }, [post]);
 
     const descRef = useCallback(
         (node) => {
@@ -136,6 +130,9 @@ function PostDetail() {
                         className={cx('content-container')}
                         ref={descRef}
                     ></div>
+
+                    <CommentList newsId={post?.id} />
+
                     <div className="flex mb-[28px]">
                         <a
                             target="_blank"
@@ -160,8 +157,8 @@ function PostDetail() {
                             ></img>
                         </a>
                     </div>
+
                     <PostMore />
-                    <Rating title="Đánh giá bài viết" />
                 </div>
                 <div className="flex-1 max-lg:hidden">
                     <SideBar hiddenNav />

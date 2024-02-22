@@ -2,21 +2,31 @@ import CloseIcon from '@mui/icons-material/Close';
 import numeral from 'numeral';
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { CartContext } from '../../contexts/CartContext';
+import { OrderContext } from '../../contexts/OrderContext';
 
-function ItemCartForPay({ cartItem }) {
-    const { onRemove, toggleQuantity } = useContext(CartContext);
+function ItemOrderForPay({ orderItem }) {
+    const { product, variation, quantity } = orderItem;
+
+    const { deleteOrderItems, changeQuantity } = useContext(OrderContext);
 
     const handleRemove = () => {
-        onRemove(cartItem.product, cartItem.quantity);
-    };
-
-    const handleAdd = () => {
-        toggleQuantity(cartItem, 'asc');
+        deleteOrderItems(orderItem);
     };
 
     const handleSubtract = () => {
-        toggleQuantity(cartItem, 'dec', cartItem.quantity);
+        changeQuantity({
+            product: product,
+            variation: variation,
+            quantity: quantity - 1,
+        });
+    };
+
+    const handleAdd = () => {
+        changeQuantity({
+            product: product,
+            variation: variation,
+            quantity: quantity + 1,
+        });
     };
 
     return (
@@ -28,22 +38,27 @@ function ItemCartForPay({ cartItem }) {
                 <CloseIcon className="icon-close" />
             </div>
             <div className="flex max-md:block justify-between flex-[1]">
-                <Link to={`/product/${cartItem.product._id}`} className="flex">
+                <Link to={`/product/${product.id}`} className="flex">
                     <img
                         alt=""
-                        src={cartItem?.product.thumb}
+                        src={product.thumbnail}
                         className="w-[60px] shrink-0"
                     ></img>
                     <div className="px-[16px]">
-                        <p className="font-[700]">{cartItem?.product.name}</p>
-                        <p className="text-[14px] mt-[4px]">
-                            Mã SP: {cartItem?.product.code}
-                        </p>
+                        <p className="font-[700]">{product.name}</p>
+                        <div className="flex gap-[16px]">
+                            <p className="text-[14px] mt-[4px]">
+                                Mã SP: {product.sku}
+                            </p>
+                            <p className="text-[14px] mt-[4px]">
+                                Quy cách: {variation.name}
+                            </p>
+                        </div>
                     </div>
                 </Link>
                 <div className="w-[120px] max-md:mt-[16px]">
                     <span className="text-[red] block text-right  max-md:text-left">
-                        {numeral(cartItem?.product.price * 1000).format('0,0')}đ
+                        {numeral(variation?.price * 1000).format('0,0')}đ
                     </span>
                     <div className="flex h-[35px]  border-[#ccc] border-[1px] mt-[12px]">
                         <div
@@ -53,7 +68,7 @@ function ItemCartForPay({ cartItem }) {
                             -
                         </div>
                         <div className="w-[50px] h-full flex items-center justify-center  font-[900]  text-[18px] cursor-pointer">
-                            {cartItem.quantity}
+                            {quantity}
                         </div>
                         <div
                             onClick={handleAdd}
@@ -68,4 +83,4 @@ function ItemCartForPay({ cartItem }) {
     );
 }
 
-export default ItemCartForPay;
+export default ItemOrderForPay;

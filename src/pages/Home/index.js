@@ -5,37 +5,40 @@ import slide1 from '../../acsset/images/slide1.png';
 import slide2 from '../../acsset/images/slide2.png';
 import List from '../../components/List';
 import Slide from '../../components/Slide';
-import { useEffect } from 'react';
-import useCategory from '../../hooks/useCategory';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { apiUrl } from '../../constants';
 
 const cx = classNames.bind(styles);
 
 function Home() {
-    //const [categorys, setCategorys] = useState([]);
+    const [categorys, setCategorys] = useState([]);
 
     useEffect(() => {
         document.title = 'Hải trà Tân Cương';
     }, []);
 
-    const { data: categorys } = useCategory();
+    //const { data: categorys } = useCategory();
 
-    // useEffect(() => {
-    //     let isCacled = false;
-    //     const fetchData = async () => {
-    //         try {
-    //             const response = await axios.get(`${apiUrl}/category`);
-    //             setCategorys(response.data);
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
+    useEffect(() => {
+        let isCacled = false;
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(
+                    `${apiUrl}/api/product_categories`,
+                );
+                setCategorys(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
 
-    //     if (!isCacled) {
-    //         fetchData();
-    //     }
+        if (!isCacled) {
+            fetchData();
+        }
 
-    //     return () => (isCacled = true);
-    // }, []);
+        return () => (isCacled = true);
+    }, []);
 
     return (
         <div>
@@ -49,13 +52,13 @@ function Home() {
                 </div>
             </div>
             <div className={cx('sub-container')}>
-                {categorys && (
+                {categorys.length > 0 && (
                     <div className="w-[1190px] mt-[88px] mb-[40px] max-lg:w-full max-lg:px-[16px] ">
                         {categorys[0] && (
-                            <Slide categoryId={categorys[0]?._id} />
+                            <Slide categoryId={categorys[0]?.id} />
                         )}
                         {categorys.map((item) => (
-                            <List key={item._id} category={item} />
+                            <List key={item.id} category={item} />
                         ))}
                     </div>
                 )}

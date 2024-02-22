@@ -4,10 +4,20 @@ import ItemCart from '../ItemCart';
 import { useContext } from 'react';
 import { CartContext } from '../../contexts/CartContext';
 import NotFound from '../NotFound';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { OrderContext } from '../../contexts/OrderContext';
 
 function Cart({ isShowing, toggle }) {
     const { cartItems } = useContext(CartContext);
+
+    const { addOrderToPay } = useContext(OrderContext);
+    const navigate = useNavigate();
+
+    const handleRedirectPay = () => {
+        addOrderToPay(cartItems);
+        toggle();
+        navigate('/pay');
+    };
 
     return isShowing
         ? ReactDOM.createPortal(
@@ -27,23 +37,19 @@ function Cart({ isShowing, toggle }) {
                           <>
                               <div className="h-[calc(100%-138px)] overflow-y-auto">
                                   {cartItems.map((item) => (
-                                      <ItemCart
-                                          key={item.product._id}
-                                          cartItem={item}
-                                      />
+                                      <ItemCart key={item.id} cartItem={item} />
                                   ))}
                               </div>
 
                               {/* Footer */}
-                              <Link
-                                  to="/pay"
+                              <div
                                   className="px-[20px] py-[20px] block"
-                                  onClick={toggle}
+                                  onClick={handleRedirectPay}
                               >
                                   <div className="h-[40px] hover:opacity-[0.8] flex items-center justify-center cursor-pointer bg-[#006837] text-white dark:text-[#555] text-[17px] font-[900]">
                                       THANH TOÁN
                                   </div>
-                              </Link>
+                              </div>
                           </>
                       ) : (
                           <NotFound title="Giỏ hàng của bạn chưa có sản phẩm nào " />

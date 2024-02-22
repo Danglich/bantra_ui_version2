@@ -1,18 +1,32 @@
 import SendIcon from '@mui/icons-material/Send';
 import { message } from 'antd';
+import axios from 'axios';
 import { useState } from 'react';
+import { apiUrl } from '../../constants';
 
-function FormContact() {
-    const [formState, setFormState] = useState({});
+function FormContact({ user }) {
+    const [formState, setFormState] = useState({
+        content: '',
+        phoneNumber: user?.phoneNumber || '',
+        email: user?.email || '',
+        fullName: user?.fullName || '',
+    });
 
     const handleChangeFormState = (e) => {
         setFormState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        message.success('Cảm ơn bạn đã liên hệ với chúng tôi !');
-        setFormState({});
+
+        try {
+            await axios.post(`${apiUrl}/api/contacts`, formState);
+            message.success('Cảm ơn bạn đã liên hệ với chúng tôi !');
+            setFormState({});
+        } catch (error) {
+            console.log(error);
+            message.error('Liên hệ chưa thành công');
+        }
     };
     return (
         <form onSubmit={handleSubmit}>
@@ -26,8 +40,8 @@ function FormContact() {
             <input
                 required
                 className="input h-[40px] px-[12px] w-full"
-                name="name"
-                value={formState.name || ''}
+                name="fullName"
+                value={formState.fullName || ''}
                 onChange={handleChangeFormState}
             />
             <div className="mt-[16px] flex justify-between max-sm:block items-center">
@@ -38,8 +52,8 @@ function FormContact() {
                     <input
                         required
                         className="input h-[40px] px-[12px] w-full"
-                        name="phone"
-                        value={formState.phone || ''}
+                        name="phoneNumber"
+                        value={formState.phoneNumber || ''}
                         onChange={handleChangeFormState}
                     />
                 </div>

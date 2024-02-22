@@ -4,17 +4,19 @@ import styles from './Category.module.scss';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import $ from 'jquery';
-import { apiUrl } from '../../../constants';
 import axios from 'axios';
 import Skeleton from '../../../components/Skeleton';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { apiUrl } from '../../../constants';
 
 const cx = classNames.bind(styles);
 
 function Category() {
     const [hideGoToTop, setHideGoToTop] = useState(true);
-    const [categorys, setCategorys] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+
+    const { pathname } = useLocation();
 
     const handleScrollTop = () => {
         //Sử dụng Jquery Animate
@@ -22,23 +24,27 @@ function Category() {
     };
 
     useEffect(() => {
-        let isCacled = false;
+        let isCancelled = false;
+
         const fetchData = async () => {
             setIsLoading(true);
+
             try {
-                const response = await axios.get(`${apiUrl}/category`);
-                setCategorys(response.data);
+                const response = await axios.get(
+                    `${apiUrl}/api/product_categories`,
+                );
+                setCategories(response.data);
                 setIsLoading(false);
             } catch (error) {
                 setIsLoading(false);
             }
         };
 
-        if (!isCacled) {
+        if (!isCancelled) {
             fetchData();
         }
 
-        return () => (isCacled = true);
+        return () => (isCancelled = true);
     }, []);
 
     useEffect(() => {
@@ -59,8 +65,14 @@ function Category() {
                 <div className="lg:w-full lg:mx-[16px] xl:w-[1190px]">
                     <ul className={cx('menu')}>
                         {isLoading && <Skeleton type="category" count={8} />}
-                        {categorys.map((item) => (
-                            <Link to={`/${item.slug}`}>
+                        {categories.map((item) => (
+                            <Link
+                                className={`${
+                                    pathname.includes(item.slug) &&
+                                    'text-blue-800'
+                                }`}
+                                to={`/${item.slug}`}
+                            >
                                 <li className={cx('item')} key={item.slug}>
                                     {item.name}
                                 </li>

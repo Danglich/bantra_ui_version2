@@ -29,7 +29,7 @@ function ProductItem({ isSlider, product, border }) {
             }
         >
             <Link
-                to={`/product/${product?._id}`}
+                to={`/product/${product?.id}`}
                 className={cx(
                     'main-container',
                     isSlider && 'slider',
@@ -42,7 +42,7 @@ function ProductItem({ isSlider, product, border }) {
                 <div className={cx('container')}>
                     <img
                         src={
-                            product?.thumb ||
+                            product?.thumbnail ||
                             'https://haitratancuong.com/vnt_upload/product/12_2021/thumbs/300__hop-tra-non-am-250g-1.jpg'
                         }
                         alt=""
@@ -52,27 +52,9 @@ function ProductItem({ isSlider, product, border }) {
                             'Trà Đinh Thượng Hạng 1 tôm Sạch Vietgap, Trà Cổ Vị Truyền Thống'}
                     </span>
                     <span className={cx('price')}>
-                        {numeral(product?.price * 1000).format('0,0')}đ
+                        {numeral(product?.lowestPrice * 1000).format('0,0')}đ -{' '}
+                        {numeral(product?.highestPrice * 1000).format('0,0')}đ
                     </span>
-
-                    <div className={cx('action-container')}>
-                        <Link
-                            to={`/product/${product?._id}`}
-                            className={cx('btn', 'more')}
-                            onClick={() => {
-                                handleClickDetailProduct(product);
-                            }}
-                        >
-                            Chi tiết
-                        </Link>
-                        <Link
-                            to="/pay"
-                            onClick={handleAddToCart}
-                            className={cx('btn', 'buy')}
-                        >
-                            Mua ngay
-                        </Link>
-                    </div>
                 </div>
             </Link>
         </div>

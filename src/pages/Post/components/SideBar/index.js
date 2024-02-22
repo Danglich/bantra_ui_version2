@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { apiUrl } from '../../../../constants';
 import { CaretRightOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import styles from './Sidebar.module.scss';
 import classNames from 'classnames/bind';
+import { apiUrl } from '../../../../constants';
 
 const cx = classNames.bind(styles);
 
@@ -16,8 +16,10 @@ function SideBar({ hiddenNav, slugCategory }) {
         let isCacled = false;
         const fetchData = async () => {
             try {
-                const categorys = await axios.get(`${apiUrl}/categoryPost`);
-                const posts = await axios.get(`${apiUrl}/post/top`);
+                const categorys = await axios.get(
+                    `${apiUrl}/api/news_categories`,
+                );
+                const posts = await axios.get(`${apiUrl}/api/news/top`);
                 setCategorys(categorys.data);
                 setPosts(posts.data);
             } catch (error) {
@@ -54,26 +56,26 @@ function SideBar({ hiddenNav, slugCategory }) {
             <div>
                 <div className="w-full overflow-hidden group">
                     <img
-                        src={posts[0]?.thumb}
+                        src={posts[0]?.thumbnail}
                         alt="ảnh"
                         className="w-full cursor-pointer group-hover:scale-[1.08] transition duration-700 ease-in-out"
                     ></img>
                 </div>
                 <Link
-                    to={`/cam-nang/${posts[0]?.category?.slug}/${posts[0]?._id}`}
+                    to={`/cam-nang/${posts[0]?.category?.slug}/${posts[0]?.id}`}
                 >
                     <p className="text-left text-[15px] mt-[14px] font-[600] mb-[16px]">
-                        {posts[0]?.name}
+                        {posts[0]?.title}
                     </p>
                 </Link>
                 <ul>
                     {posts.slice(1).map((post) => (
                         <Link
-                            key={post._id}
-                            to={`/cam-nang/${post?.category?.slug}/${post?._id}`}
+                            key={post.id}
+                            to={`/cam-nang/${post?.category?.slug}/${post?.id}`}
                         >
                             <li className="text-left text-[#000] hover:text-[#006837] text-[15px] py-[10px] border-t-[1px] boder-t-[#ccc]">
-                                {post?.name}
+                                {post?.title}
                             </li>
                         </Link>
                     ))}

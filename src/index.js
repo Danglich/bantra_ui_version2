@@ -9,6 +9,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import LastViewProvider from './contexts/LastViewContext';
 import CartContextProvider from './contexts/CartContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AuthProvider } from './contexts/AuthContext';
+import OrderProvider from './contexts/OrderContext';
 
 const queryClient = new QueryClient();
 
@@ -17,13 +19,17 @@ root.render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
             <GlobalStyle>
-                <CartContextProvider>
-                    <LastViewProvider>
-                        <Router>
-                            <App />
-                        </Router>
-                    </LastViewProvider>
-                </CartContextProvider>
+                <AuthProvider>
+                    <CartContextProvider>
+                        <OrderProvider>
+                            <LastViewProvider>
+                                <Router>
+                                    <App />
+                                </Router>
+                            </LastViewProvider>
+                        </OrderProvider>
+                    </CartContextProvider>
+                </AuthProvider>
             </GlobalStyle>
         </QueryClientProvider>
     </React.StrictMode>,

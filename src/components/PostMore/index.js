@@ -11,7 +11,7 @@ function PostMore() {
         let isCacled = false;
         const fetchData = async () => {
             try {
-                const posts = await axios.get(`${apiUrl}/post/top`);
+                const posts = await axios.get(`${apiUrl}/api/news/top`);
                 setPosts(posts.data);
             } catch (error) {
                 console.log(error);
@@ -31,21 +31,21 @@ function PostMore() {
             <div className="flex flex-wrap mx-[-8px]">
                 {posts.slice(0, 4).map((post) => (
                     <div
-                        key={post._id}
+                        key={post?.id}
                         className="w-[25%] px-[8px] max-sm:w-[50%]"
                     >
                         <Link
-                            to={`/cam-nang/${posts[0]?.category?.slug}/${posts[0]?._id}`}
+                            to={`/cam-nang/${posts[0]?.category?.slug}/${posts[0]?.id}`}
                         >
-                            <div className="w-full overflow-hidden group">
+                            <div className="w-full relative pt-[75%] overflow-hidden group">
                                 <img
-                                    className="w-full group-hover:scale-[1.08] transition duration-700 ease-in-out"
+                                    className="w-full inset-[0] h-full absolute group-hover:scale-[1.08] transition duration-700 ease-in-out"
                                     alt="Ảnh"
-                                    src={post.thumb}
+                                    src={post?.thumbnail}
                                 ></img>
                             </div>
                             <h5 className="mt-[10px] text-left font-bold">
-                                {post.name}
+                                {post?.title}
                             </h5>
                         </Link>
                     </div>

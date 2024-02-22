@@ -1,9 +1,13 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import FormContact from '../../components/FormContact';
+import { AuthContext } from '../../contexts/AuthContext';
 function Contact() {
     useEffect(() => {
         document.title = 'Liên hệ - góp ý';
     }, []);
+
+    const { user } = useContext(AuthContext);
+
     return (
         <div className="mx-auto py-[20px] mt-[12px] mb-[40px] max-md:px-[16px] xl:w-[1190px] max-xl:w-full">
             <h1 className="uppercase text-[#006837] text-[30px] text-center">
@@ -40,7 +44,7 @@ function Contact() {
                 </div>
                 <div className="w-[50%] max-md:w-full max-md:mt-[24px] px-[12px]">
                     <div className="mr-[20px]">
-                        <FormContact />
+                        <FormContact user={user} />
                     </div>
                 </div>
             </div>

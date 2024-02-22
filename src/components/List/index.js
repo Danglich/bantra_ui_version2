@@ -4,39 +4,42 @@ import ProductItem from '../ProductItem';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { Link } from 'react-router-dom';
 import Skeleton from '../Skeleton';
-import useList from '../../hooks/useList';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { apiUrl } from '../../constants';
 
 const cx = classNames.bind(styles);
 
 function List({ category }) {
-    //const [products, setProducts] = useState([]);
-    //const [isLoading, setIsloading] = useState(true);
+    const [products, setProducts] = useState([]);
+    const [isLoading, setIsloading] = useState(true);
 
-    const { isLoading, data: products } = useList(category._id, 'less');
+    //const { isLoading, data: products } = useList(category._id, 'less');
 
-    // useEffect(() => {
-    //     let isCacled = false;
+    useEffect(() => {
+        let isCacled = false;
 
-    //     const fetchData = async () => {
-    //         setIsloading(true);
-    //         try {
-    //             const products = await axios.get(
-    //                 `${apiUrl}/product?categoryId=${category._id}&&type=less`,
-    //             );
-    //             setProducts(products.data);
-    //             setIsloading(false);
-    //         } catch (error) {
-    //             console.log(error);
-    //             setIsloading(false);
-    //         }
-    //     };
+        const fetchData = async () => {
+            setIsloading(true);
+            try {
+                const products = await axios.get(
+                    `${apiUrl}/api/product_categories/${category.id}/products`,
+                );
 
-    //     if (!isCacled) {
-    //         fetchData();
-    //     }
+                setProducts(products.data.data);
+                setIsloading(false);
+            } catch (error) {
+                console.log(error);
+                setIsloading(false);
+            }
+        };
 
-    //     return () => (isCacled = true);
-    // }, [category._id]);
+        if (!isCacled) {
+            fetchData();
+        }
+
+        return () => (isCacled = true);
+    }, [category.id]);
 
     return (
         <div className={cx('container')}>
@@ -55,7 +58,7 @@ function List({ category }) {
             <div className={cx('list')}>
                 {!isLoading &&
                     products.map((pr) => (
-                        <ProductItem key={pr._id} product={pr} />
+                        <ProductItem key={pr.id} product={pr} />
                     ))}
                 {isLoading && <Skeleton type="product" count={4} />}
             </div>

@@ -34,11 +34,7 @@
 
     .item {
         cursor: pointer;
-        border-radius: 8px;
-        padding: 12px 20px;
         flex: none;
-        background-color: var(--primary-color);
-        color: white;
         margin-right: 12px;
 
         &:hover {

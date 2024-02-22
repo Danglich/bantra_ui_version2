@@ -8,7 +8,7 @@ function LastView() {
     if (lastViews.length === 0) return <></>;
 
     return (
-        <div>
+        <div className="mt-[36px]">
             <h1 className="text-[22px] font-[500] mb-[16px]">
                 Sản phẩm đã xem
             </h1>

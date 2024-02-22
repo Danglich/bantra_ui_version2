@@ -5,7 +5,7 @@ import { apiUrl } from '../constants';
 function usePost(postId) {
     const fetchData = async () => {
         try {
-            const { data } = await axios.get(`${apiUrl}/post/${postId}`);
+            const { data } = await axios.get(`${apiUrl}/api/news/${postId}`);
             return data;
         } catch (error) {
             console.log(error);

@@ -1,145 +1,88 @@
 import styles from './Category.module.scss';
 import classNames from 'classnames/bind';
 import { useParams } from 'react-router-dom';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProductItem from '../../components/ProductItem';
 import { Spin } from 'antd';
-import useCategory from '../../hooks/useCategory';
-import useList from '../../hooks/useList';
+import axios from 'axios';
+import { apiUrl } from '../../constants';
 
 const cx = classNames.bind(styles);
 
 function Category() {
     const { slug } = useParams();
-    //const [category, setCategory] = useState();
-    // const [products, setProducts] = useState([]);
-    // const [isLoading, setIsLoading] = useState(true);
-    const [filter, setFilter] = useState('');
-    const [filterPrice, setFilterPrice] = useState();
-    const [productsFilter, setProductsFilter] = useState([]);
-    const [productsFilterPrice, setProductsFilterPrice] = useState([]);
+    const [category, setCategory] = useState();
+    const [products, setProducts] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const { data: category } = useCategory(slug);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalProducts, setTotalProducts] = useState(0);
 
-    const categoryId = useMemo(() => {
-        return category ? category._id : null;
-    }, [category]);
+    const [sortBy, setSortBy] = useState('newest');
+    const [price, setPrice] = useState(null);
 
-    const { data: products, isLoading } = useList(categoryId, 'more');
+    const handleChangePrice = (price) => {
+        setPrice(price);
+        setCurrentPage(1);
+    };
 
-    const productsAsc = useMemo(() => {
-        return products ? [...products].sort((a, b) => a.price - b.price) : [];
-    }, [products]);
-
-    const productsDecs = useMemo(() => {
-        return products ? [...products].sort((a, b) => b.price - a.price) : [];
-    }, [products]);
-
-    const productsNew = useMemo(() => {
-        return products
-            ? [...products].sort((a, b) => b.createdAt - a.createdAt)
-            : [];
-    }, [products]);
+    //const []
 
     useEffect(() => {
         document.title = category?.name;
     }, [category]);
 
-    // useEffect(() => {
-    //     let isCacled = false;
+    useEffect(() => {
+        setPrice(null);
+        setCurrentPage(1);
+    }, [slug]);
 
-    //     const fetchData = async () => {
-    //         setIsLoading(true);
-    //         try {
-    //             const category = await axios.get(`${apiUrl}/category/${slug}`);
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
 
-    //             setCategory(category.data);
+    useEffect(() => {
+        let isCacled = false;
 
-    //             if (category.data) {
-    //                 const products = await axios.get(
-    //                     `${apiUrl}/product?categoryId=${category.data?._id}&&type=more`,
-    //                 );
+        const fetchData = async () => {
+            setIsLoading(true);
+            try {
+                const category = await axios.get(
+                    `${apiUrl}/api/product_categories/${slug}`,
+                );
 
-    //                 setProducts(products.data);
-    //                 setIsLoading(false);
-    //             }
-    //         } catch (error) {
-    //             console.log(error);
-    //             setIsLoading(false);
-    //         }
-    //     };
+                setCategory(category.data);
 
-    //     if (!isCacled) {
-    //         fetchData();
-    //     }
+                if (category.data) {
+                    const response = await axios.get(
+                        `${apiUrl}/api/product_categories/${
+                            category.data.id
+                        }/products?page=${currentPage - 1}&sort=${sortBy}${
+                            price && `&price=${price}`
+                        }`,
+                    );
 
-    //     return () => (isCacled = true);
-    // }, [slug]);
+                    const data = response.data;
 
-    const handleChangeCheckbox = (e) => {
-        if (e.target.checked) {
-            const inputPrices = document.querySelectorAll(
-                'input[type="checkbox"]',
-            );
-
-            inputPrices.forEach((input) => {
-                if (input !== e.target) {
-                    input.checked = false;
+                    setTotalPages(data.totalPages);
+                    setCurrentPage(data.currentPage + 1);
+                    setProducts(data.data);
+                    setTotalProducts(data.totalItems);
+                    setIsLoading(false);
                 }
-            });
-
-            setFilter(e.target.value);
-        } else {
-            setFilter('');
-        }
-    };
-
-    useEffect(() => {
-        if (filter === 'new') {
-            setProductsFilter(productsNew);
-        }
-        if (filter === 'asc') {
-            setProductsFilter(productsAsc);
-        }
-        if (filter === 'decs') {
-            setProductsFilter(productsDecs);
-        }
-        if (filter === '') {
-            setProductsFilter(products || []);
-        }
-    }, [filter, productsAsc, productsDecs, productsNew, products]);
-
-    const handleSetFilterPrice = (e, start, end) => {
-        const filtersBtn = document.querySelectorAll(`.${cx('filter-btn')}`);
-
-        if (e.target.classList.contains(cx('active'))) {
-            e.target.classList.remove(cx('active'));
-            setFilterPrice();
-        } else {
-            e.target.classList.add(cx('active'));
-            setFilterPrice([start, end]);
-        }
-
-        filtersBtn.forEach((elm) => {
-            if (elm.classList.contains(cx('active')) && elm !== e.target) {
-                elm.classList.remove(cx('active'));
+            } catch (error) {
+                console.log(error);
+                setIsLoading(false);
             }
-        });
-    };
+        };
 
-    useEffect(() => {
-        if (filterPrice) {
-            setProductsFilterPrice(
-                productsFilter.filter(
-                    (item) =>
-                        item.price > filterPrice[0] &&
-                        item.price < filterPrice[1],
-                ),
-            );
-        } else {
-            setProductsFilterPrice([]);
+        if (!isCacled) {
+            fetchData();
         }
-    }, [filterPrice, productsFilter]);
+
+        return () => (isCacled = true);
+    }, [slug, sortBy, price, currentPage]);
 
     return (
         <div className="flex items-center justify-center w-full ">
@@ -148,7 +91,8 @@ function Category() {
                     <img
                         className={cx('img')}
                         alt="Ảnh"
-                        src={category?.thumb}
+                        src={category?.thumbnail}
+                        key={slug}
                     ></img>
                     <h1 className={cx('title')}>{category?.name}</h1>
                     <div className={cx('filter-container')}>
@@ -158,79 +102,101 @@ function Category() {
                             </span>
                             <div className="flex gap-[16px] max-lg:overflow-auto flex-1">
                                 <button
-                                    className={cx('filter-btn')}
-                                    onClick={(e) => {
-                                        handleSetFilterPrice(e, 0, 100);
-                                    }}
+                                    onClick={() => handleChangePrice('0-100')}
+                                    className={`${
+                                        price === '0-100' && 'active'
+                                    } ${cx('filter-btn')}`}
                                 >
                                     0-100.000đ
                                 </button>
                                 <button
-                                    className={cx('filter-btn')}
-                                    onClick={(e) => {
-                                        handleSetFilterPrice(e, 100, 500);
-                                    }}
+                                    onClick={() => handleChangePrice('100-500')}
+                                    className={`${
+                                        price === '100-500' && 'active'
+                                    } ${cx('filter-btn')}`}
                                 >
                                     100.000đ-500.000đ
                                 </button>
                                 <button
-                                    className={cx('filter-btn')}
-                                    onClick={(e) => {
-                                        handleSetFilterPrice(e, 500, 1000);
-                                    }}
+                                    onClick={() =>
+                                        handleChangePrice('500-1000')
+                                    }
+                                    className={`${
+                                        price === '500-1000' && 'active'
+                                    } ${cx('filter-btn')}`}
                                 >
                                     500.000đ-1.000.000đ
                                 </button>
                                 <button
-                                    className={cx('filter-btn')}
-                                    onClick={(e) => {
-                                        handleSetFilterPrice(e, 1000, 2500);
-                                    }}
+                                    onClick={() =>
+                                        handleChangePrice('1000-2500')
+                                    }
+                                    className={`${
+                                        price === '1000-2500' && 'active'
+                                    } ${cx('filter-btn')}`}
                                 >
                                     1.000.000đ-2.500.000đ
                                 </button>
+
                                 <button
-                                    className={cx('filter-btn')}
-                                    onClick={(e) => {
-                                        handleSetFilterPrice(e, 2500, 5000);
-                                    }}
+                                    onClick={() =>
+                                        handleChangePrice('2500-5000')
+                                    }
+                                    className={`${
+                                        price === '2500-1000000' && 'active'
+                                    } ${cx('filter-btn')}`}
                                 >
-                                    2.500.000đ-5.000.000đ
+                                    Trên 2.500.000đ
                                 </button>
                             </div>
                         </div>
                         <div className={cx('filter-sort')}>
                             <span className={cx('filter-title')}>
-                                6 sản phẩm
+                                {totalProducts} sản phẩm
                             </span>
                             <div className={cx('filter-sort-container')}>
                                 <label className={cx('filter-item')}>
-                                    Hàng mới
+                                    Mới nhất
                                     <input
-                                        name="time"
-                                        value="new"
-                                        type="checkbox"
-                                        onClick={handleChangeCheckbox}
+                                        name="sort"
+                                        value="newest"
+                                        type="radio"
+                                        onChange={(e) => {
+                                            if (e.target.checked) {
+                                                setSortBy('newest');
+                                            }
+                                        }}
+                                        checked={sortBy === 'newest'}
                                     />
                                     <span className={cx('checkmark')}></span>
                                 </label>
                                 <label className={cx('filter-item')}>
-                                    Giá tăng dần
+                                    Cũ nhất
                                     <input
-                                        type="checkbox"
-                                        name="price"
-                                        value="asc"
-                                        onClick={handleChangeCheckbox}
+                                        type="radio"
+                                        name="sort"
+                                        value="oldest"
+                                        onChange={(e) => {
+                                            if (e.target.checked) {
+                                                setSortBy('oldest');
+                                            }
+                                        }}
+                                        checked={sortBy === 'oldest'}
                                     />
                                     <span className={cx('checkmark')}></span>
                                 </label>
                                 <label className={cx('filter-item')}>
-                                    Giá giảm dần
+                                    Bán chạy nhất
                                     <input
-                                        type="checkbox"
-                                        name="price"
-                                        value="decs"
-                                        onClick={handleChangeCheckbox}
+                                        type="radio"
+                                        name="sort"
+                                        value="bestseller"
+                                        onChange={(e) => {
+                                            if (e.target.checked) {
+                                                setSortBy('bestseller');
+                                            }
+                                        }}
+                                        checked={sortBy === 'bestseller'}
                                     />
                                     <span className={cx('checkmark')}></span>
                                 </label>
@@ -244,40 +210,53 @@ function Category() {
                                 <Spin size="large" />
                             </div>
                         )}
-                        {filterPrice && (
-                            <>
-                                {productsFilterPrice?.length > 0 ? (
-                                    productsFilterPrice.map((product) => {
-                                        return (
-                                            <ProductItem
-                                                key={product._id}
-                                                border
-                                                product={product}
-                                            />
-                                        );
-                                    })
-                                ) : (
-                                    <div className={cx('no-items')}>
-                                        <h1>Không tìm thấy sản phẩm</h1>
-                                        <img
-                                            alt="no item"
-                                            src="https://haitratancuong.com/skins/default/images/nothing-found.png"
-                                        ></img>
-                                    </div>
-                                )}
-                            </>
-                        )}
-                        {!filterPrice &&
-                            productsFilter.map((product) => {
+                        {products?.length > 0 ? (
+                            products.map((product) => {
                                 return (
                                     <ProductItem
-                                        key={product._id}
+                                        key={product.id}
                                         border
                                         product={product}
                                     />
                                 );
-                            })}
+                            })
+                        ) : (
+                            <div className={cx('no-items')}>
+                                <h1>Không tìm thấy sản phẩm</h1>
+                                <img
+                                    alt="no item"
+                                    src="https://haitratancuong.com/skins/default/images/nothing-found.png"
+                                ></img>
+                            </div>
+                        )}
                     </div>
+                    {products.length > 0 && (
+                        <div className="mb-8 flex justify-start">
+                            {/* Phần phân trang */}
+                            <nav className="inline-flex">
+                                <ul className="flex items-center">
+                                    {Array.from(
+                                        { length: totalPages },
+                                        (_, index) => index + 1,
+                                    ).map((pageNumber) => (
+                                        <li
+                                            key={pageNumber}
+                                            onClick={() =>
+                                                handlePageChange(pageNumber)
+                                            }
+                                            className={`cursor-pointer mx-2 px-3 py-1 rounded ${
+                                                pageNumber === currentPage
+                                                    ? 'bg-indigo-500 text-white'
+                                                    : 'bg-gray-300 text-gray-700'
+                                            }`}
+                                        >
+                                            {pageNumber}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </nav>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

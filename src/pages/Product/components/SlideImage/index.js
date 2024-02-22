@@ -5,7 +5,7 @@ import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
 
-function Slide({ imageUrls }) {
+function Slide({ medias }) {
     const [slide1, setSlide1] = useState();
     const [slide2, setSlide2] = useState();
 
@@ -18,7 +18,7 @@ function Slide({ imageUrls }) {
                 }}
                 classNames={cx('slide1')}
             >
-                {imageUrls.map((image) => (
+                {medias.map((media) => (
                     <div style={{}}>
                         <img
                             style={{
@@ -27,8 +27,8 @@ function Slide({ imageUrls }) {
                                 cursor: 'pointer',
                             }}
                             className="max-lg:h-[650px!important] max-sm:h-[360px!important]"
-                            key={image}
-                            src={image}
+                            key={media.id}
+                            src={media.url}
                             alt="ảnh"
                         ></img>
                     </div>
@@ -44,7 +44,7 @@ function Slide({ imageUrls }) {
                 focusOnSelect={true}
                 className={cx('slider2-container')}
             >
-                {imageUrls.map((image) => (
+                {medias.map((media) => (
                     <div>
                         <img
                             style={{
@@ -53,8 +53,8 @@ function Slide({ imageUrls }) {
                                 cursor: 'pointer',
                             }}
                             className="max-lg:h-[155px!important] max-sm:h-[80px!important]"
-                            key={image}
-                            src={image}
+                            key={media.id}
+                            src={media.url}
                             alt="ảnh"
                         ></img>
                     </div>

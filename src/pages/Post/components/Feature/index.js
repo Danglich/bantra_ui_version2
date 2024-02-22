@@ -5,18 +5,18 @@ function Feature({ posts }) {
     return (
         <div className="w-full flex gap-[20px] max-md:flex-col">
             <Link
-                to={`/cam-nang/${posts[0]?.category?.slug}/${posts[0]?._id}`}
+                to={`/cam-nang/${posts[0]?.category?.slug}/${posts[0]?.id}`}
                 className="flex-1"
             >
                 <div className="w-full overflow-hidden group">
                     <img
                         alt="Ảnh"
-                        src={posts[0]?.thumb}
+                        src={posts[0]?.thumbnail}
                         className="w-full cursor-pointer group-hover:scale-[1.08] transition duration-700 ease-in-out"
                     ></img>
                 </div>
                 <h2 className="font-bold text-left text-[17px] my-[12px] cursor-pointer">
-                    {posts[0]?.name}
+                    {posts[0]?.title}
                 </h2>
                 <p className="text-[#888] text-left font-[400] text-[14px] leading-[23px]">
                     Mỗi năm cứ vào ngày 23 tháng chạp âm lịch mọi người lại nô
@@ -28,24 +28,24 @@ function Feature({ posts }) {
             <div className="flex-1 mt-[-12px]">
                 {posts.slice(1).map((post) => (
                     <Link
-                        to={`/cam-nang/${post?.category?.slug}/${post?._id}`}
-                        key={post._id}
+                        to={`/cam-nang/${post?.category?.slug}/${post?.id}`}
+                        key={post.id}
                         className="flex gap-[14px] py-[12px] border-b-[1px] border-[#ccc] last:border-b-0"
                     >
                         <div className="w-[135px] shrink-0 group overflow-hidden">
                             <img
                                 className="w-full  align-middle cursor-pointer group-hover:scale-[1.08] transition duration-700 ease-in-out"
                                 alt=""
-                                src={post?.thumb}
+                                src={post?.thumbnail}
                             ></img>
                         </div>
                         <div className="flex-1">
                             <p className="text-[#333]  text-left text-[15px] mt-[-2px] cursor-pointer">
-                                {post?.name}
+                                {post?.title}
                             </p>
                             <span className="text-left block text-[14px] text-[300] text-[#006837] mt-[4px] flex items-center">
                                 <CalendarOutlined className="mr-[10px] text-[14px]" />
-                                02/10/2021
+                                {post?.createdAt.slice(0, 10)}
                             </span>
                         </div>
                     </Link>

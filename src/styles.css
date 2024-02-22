@@ -11,9 +11,9 @@
     border: 1px solid #ccc;
 }
 
-input:invalid {
+/* input:invalid {
     border: 1px solid red;
-}
+} */
 
 textarea {
     outline: none;
